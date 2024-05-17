@@ -1,5 +1,13 @@
 use std::io;
 
+enum Operator {
+
+    Addition,
+    Subtraction,
+    Multiplication,
+    Division,
+}
+
 fn main() {
 
     loop {
@@ -39,44 +47,51 @@ fn main() {
             .trim()
             .parse()
             .expect("Invalid value for num2!");
+        
+            loop {
+            
+            println!("Choose an operation:");
+            println!("1. Addition");
+            println!("2. Subtraction");
+            println!("3. Multiplication");
+            println!("4. Division");
 
-        println!("Enter the operator(or \"exit\" to quit):");
-        let mut operator = String::new();
+            let mut choice = String::new();
 
-        io::stdin()
-            .read_line(&mut operator)
-            .expect("Failed to read line!");
+        io::stdin().read_line(&mut choice).expect("Failed to read line!");
+        let choice = choice.trim().parse().unwrap();
 
-            if operator.to_lowercase() == "exit" {
+                match choice {
 
-                panic!("Bye :)");
-    
+                1 => perform_operation(Operator::Addition, num1, num2),
+                2 => perform_operation(Operator::Subtraction, num1, num2),
+                3 => perform_operation(Operator::Multiplication, num1, num2),
+                4 => perform_operation(Operator::Division, num1, num2),
+                _ => println!("Invalid operator!"), 
+
+                };
+
+                break;
+                
             }
+        }
+    }
 
-        let operator: char = operator
-            .chars()
-            .next()
-            .expect("Invalid operator!");
+fn perform_operation(operator: Operator, num1: i32, num2: i32) {
 
-        match operator {
+    match operator {
 
-            '+' => {println!("The sum of {} and {} is {}.", num1, num2, num1 + num2)},
-            '-' => {println!("The difference between {} and {} is {}.", num1, num2, num1 - num2)},
-            '*' => {println!("The product of {} and {} is {}.", num1, num2, num1 * num2)},
-            '/' => {
+        Operator::Addition => println!("The sum is {}", num1 + num2),
+        Operator::Subtraction => println!("The difference is {}", num1 - num2),
+        Operator::Multiplication => println!("The product is {}", num1 * num2),
+        Operator::Division => if num2 == 0 {
 
-                if num2 == 0 {
+            panic!("Division by zero not allowed!");
 
-                    println!("They used to divide by zero in your village abi?");
+        } else {
 
-                } else {
-                    
-                    println!("The quotient of {} and {} is {}.", num1, num2, num1 / num2);
+            println!("The quotient is {}", num1 / num2);
 
-                }
-            },
-
-            _ => {println!("Invalid calculation!");}
         }
     }
 }
